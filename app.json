@@ -1,0 +1,10 @@
+{
+  "name": "Daily",
+  "displayName": "Daily",
+  "expo": {
+    "sdkVersion": "20.0.0",
+    "packagerOpts": {
+      "config": "rn-cli.config.js"
+    }
+  }
+}

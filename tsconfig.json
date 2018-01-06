@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es5",
+        "outDir": "./compile/",
+        "noImplicitAny": true,  // 不允许隐式的any类型声明，即必须显式地标注某个变量的类型是any，推荐启用！
+        "strictNullChecks": true,  // 严格的空值检查，对可能会是undefined或null的变量引用提出告警，推荐启用！
+        "sourceMap": true,
+        "experimentalDecorators": true,
+        "jsx": "react",
+        "lib": [
+            "dom",
+            "es2015"
+        ]
+    },
+    "include": [
+        "./src/**/*"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}
