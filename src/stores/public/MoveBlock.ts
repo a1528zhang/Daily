@@ -1,10 +1,14 @@
 import { observable, action } from "mobx";
 import { MOVE_BLOCK_WIDTH } from '../../common/const';
+import { computed } from "mobx/lib/api/computed";
 
+type MoveBlockStyle = {
+    [propName: string]: any;
+}
 export class MoveBlockStore {
     @observable _progress: number;
     @observable _title: string;
-    @observable _style: object = {
+    @observable _style: MoveBlockStyle = {
         height: MOVE_BLOCK_WIDTH,
         width: MOVE_BLOCK_WIDTH,
         position: 'absolute',
@@ -41,11 +45,11 @@ export class MoveBlockStore {
     }
     @action
     setStyle(s: object) {
+        console.log('before', s, this._style);
         this._style = {
             ...this._style,
             ...s,
         };
-        console.log('set style', this._style)
     }
     @action 
     toggleDisplay(b: boolean) {

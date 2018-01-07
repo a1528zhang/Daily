@@ -42,7 +42,6 @@ export default class SceneBlock extends React.Component<SceneBlockProps, any> {
             onMoveShouldSetPanResponder: ()=> true,
             onPanResponderGrant: (evt, gestureState)=>{
                 const {pageX, pageY, locationX, locationY} = evt.nativeEvent; 
-                console.log('开始坐标：', gestureState.x0, gestureState.y0, pageX, pageY, locationX, locationY);
             },
             onPanResponderMove: (evt, gestureState)=>{
                 const {pageX, pageY, locationX, locationY} = evt.nativeEvent; 
@@ -55,6 +54,16 @@ export default class SceneBlock extends React.Component<SceneBlockProps, any> {
                         display: 'none',
                     }
                 });
+                if(sceneListStore.senceListScrollViewRef) {
+                    // 如果可以滚动
+                    // 判断moveblock是否已经移动到顶部
+                    // console.log('yes', sceneListStore.senceListScrollViewRef);
+                    console.log('移动中：', this._containerInitLeft, this._animateBlockInitLeft, gestureState.dx);
+                    console.log('方块坐标:', moveBlockStore);
+                    if (moveBlockStore.style === 0) {
+                        console.log('到顶了');
+                    }
+                }
                 moveBlockStore.setStyle({
                     backgroundColor: 'blue',
                     left: this._containerInitLeft + this._animateBlockInitLeft + gestureState.dx,
@@ -79,14 +88,12 @@ export default class SceneBlock extends React.Component<SceneBlockProps, any> {
     }
     private press = (e: any) => {
         const {onPress} = this.props;
-        console.log('press');
         onPress(e);
     }
     private deleteScene = (e: any) => {
         console.log('deleteScene', e);
     }
     private longPress = () => {
-        console.log('longPress');
         const e = sceneListStore.editable;
         sceneListStore.toggleEditable(!e);
     }

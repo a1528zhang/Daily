@@ -53,15 +53,20 @@ export default class SceneList extends React.Component<any, any> {
         let sceneBlocks = this.renderBlocks();
         let moveBlock = moveBlockStore.display? <MoveBlock/>: null;
         return (
-            <ScrollView scrollEnabled={!sceneListStore.editable} style={styles.frame}>
-                <View style={styles.blockList}>
-                    {sceneBlocks}
-                </View>
-                <Button title="task" onPress={() => this.props.navigation.navigate('Task')}/>
-                <Button title="localstorage" onPress={() => this.saveData()}/>
-                <Button title="get data" onPress={() => this.getData()}/>
-                {moveBlock}
-            </ScrollView>
+            <View>
+                <View style={styles.scrollUp}/>
+                <ScrollView scrollEnabled={!sceneListStore.editable} style={styles.frame}
+                    ref={(ref: any) => sceneListStore.setSenceListScrollViewRef(ref)}>
+                    <View style={styles.blockList}>
+                        {sceneBlocks}
+                    </View>
+                    {/* <Button title="task" onPress={() => this.props.navigation.navigate('Task')}/>
+                    <Button title="localstorage" onPress={() => this.saveData()}/>
+                    <Button title="get data" onPress={() => this.getData()}/> */}
+                    {moveBlock}
+                </ScrollView>
+                <View style={styles.scrollDown}/>
+            </View>
         )
     }
 }
@@ -76,4 +81,20 @@ const styles = StyleSheet.create({
         position: 'relative',
         width: '100%'
     },
+    scrollUp: {
+        width: '100%',
+        position: 'absolute',
+        height: 10,
+        top: 0,
+        zIndex: 3,
+        backgroundColor: 'pink',
+    },
+    scrollDown: {
+        width: '100%',
+        position: 'absolute',
+        height: 10,
+        bottom: 0,
+        zIndex: 3,
+        backgroundColor: 'pink',
+    }
 });

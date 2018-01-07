@@ -5,6 +5,7 @@ export class SceneListStore {
     @observable tasks: Array<SceneStore> = [];
     @observable editable: boolean = false;  // sence block is editable
     @observable selected: boolean = false;  // one of sence block has been selected
+    @observable senceListScrollViewRef: any = null;
 
     @computed
     get unfinishedTaskCount(): number {
@@ -24,6 +25,11 @@ export class SceneListStore {
     @action
     public toggleSelected(selected: boolean) {
         this.selected = selected;
+    }
+    
+    @action
+    public setSenceListScrollViewRef(ref: any) {
+        this.senceListScrollViewRef = ref;
     }
 }
 
