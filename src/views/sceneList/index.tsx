@@ -8,6 +8,8 @@ import {
     AsyncStorage,
     TouchableWithoutFeedback,
     ScrollView,
+    PanResponder,
+    PanResponderInstance,
     LayoutChangeEvent} from 'react-native';
 import SceneBlock from './SceneBlock';
 import {getStorageScenes, Scene, setStorageScenes} from '../../common/util';
@@ -20,15 +22,31 @@ import MoveBlock from '../component/MoveBlock';
 
 @observer
 export default class SceneList extends React.Component<any, any> {
+    _scrollUpResponder: PanResponderInstance;
+    _scrollDownResponder: PanResponderInstance;
     static navigationOptions = {
         title: 'Scenes',
     }
-    async getData() {
-        let data = await AsyncStorage.getItem('data');
-        console.log('local data is : ', data);
-    }
     constructor(props: any) {
         super(props);
+    }
+    componentWillMount(){
+        this._scrollUpResponder = PanResponder.create({
+            onMoveShouldSetPanResponder: ()=> {
+                console.log('ask');
+                return true;
+            },
+            onMoveShouldSetPanResponderCapture: ()=> true,
+            onPanResponderMove: (evt, gestureState)=>{
+                console.log('scroll up');
+            },
+        });
+        this._scrollDownResponder = PanResponder.create({
+            onMoveShouldSetPanResponder: ()=> true,
+            onPanResponderMove: (evt, gestureState)=>{
+                console.log('scroll down');
+            },
+        });
     }
     async saveData() {
         try {
@@ -37,6 +55,10 @@ export default class SceneList extends React.Component<any, any> {
         } catch(error) {
             console.error(error);
         }
+    }
+    async getData() {
+        let data = await AsyncStorage.getItem('data');
+        console.log('local data is : ', data);
     }
     private blockPress = (e: any) => {
         console.log('block press', e);
@@ -54,7 +76,7 @@ export default class SceneList extends React.Component<any, any> {
         let moveBlock = moveBlockStore.display? <MoveBlock/>: null;
         return (
             <View>
-                <View style={styles.scrollUp}/>
+                <View style={styles.scrollUp} {...this._scrollUpResponder.panHandlers}/>
                 <ScrollView scrollEnabled={!sceneListStore.editable} style={styles.frame}
                     ref={(ref: any) => sceneListStore.setSenceListScrollViewRef(ref)}>
                     <View style={styles.blockList}>
@@ -65,7 +87,7 @@ export default class SceneList extends React.Component<any, any> {
                     <Button title="get data" onPress={() => this.getData()}/> */}
                     {moveBlock}
                 </ScrollView>
-                <View style={styles.scrollDown}/>
+                <View style={styles.scrollDown} {...this._scrollDownResponder.panHandlers}/>
             </View>
         )
     }

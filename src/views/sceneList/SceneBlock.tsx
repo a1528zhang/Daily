@@ -39,7 +39,10 @@ export default class SceneBlock extends React.Component<SceneBlockProps, any> {
     componentWillMount(){
         this._panResponder = PanResponder.create({
             onStartShouldSetPanResponder: () => true,
-            onMoveShouldSetPanResponder: ()=> true,
+            onMoveShouldSetPanResponder: ()=> {
+                console.log('move block ask');
+                return true;
+            },
             onPanResponderGrant: (evt, gestureState)=>{
                 const {pageX, pageY, locationX, locationY} = evt.nativeEvent; 
             },
@@ -60,9 +63,6 @@ export default class SceneBlock extends React.Component<SceneBlockProps, any> {
                     // console.log('yes', sceneListStore.senceListScrollViewRef);
                     console.log('移动中：', this._containerInitLeft, this._animateBlockInitLeft, gestureState.dx);
                     console.log('方块坐标:', moveBlockStore);
-                    if (moveBlockStore.style === 0) {
-                        console.log('到顶了');
-                    }
                 }
                 moveBlockStore.setStyle({
                     backgroundColor: 'blue',
