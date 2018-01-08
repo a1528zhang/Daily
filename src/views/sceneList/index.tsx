@@ -30,24 +30,6 @@ export default class SceneList extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
     }
-    componentWillMount(){
-        this._scrollUpResponder = PanResponder.create({
-            onMoveShouldSetPanResponder: ()=> {
-                console.log('ask');
-                return true;
-            },
-            onMoveShouldSetPanResponderCapture: ()=> true,
-            onPanResponderMove: (evt, gestureState)=>{
-                console.log('scroll up');
-            },
-        });
-        this._scrollDownResponder = PanResponder.create({
-            onMoveShouldSetPanResponder: ()=> true,
-            onPanResponderMove: (evt, gestureState)=>{
-                console.log('scroll down');
-            },
-        });
-    }
     async saveData() {
         try {
             await AsyncStorage.setItem('data', '666');
@@ -63,6 +45,9 @@ export default class SceneList extends React.Component<any, any> {
     private blockPress = (e: any) => {
         console.log('block press', e);
     }
+    componentDidMount() {
+        console.log(sceneListStore.senceListScrollViewRef);
+    }
     renderBlocks(): JSX.Element[] | null {
         const sceneList: Scene[] = localStorage.sceneList;
         return sceneList.map((scene) => {
@@ -75,20 +60,18 @@ export default class SceneList extends React.Component<any, any> {
         let sceneBlocks = this.renderBlocks();
         let moveBlock = moveBlockStore.display? <MoveBlock/>: null;
         return (
-            <View>
-                <View style={styles.scrollUp} {...this._scrollUpResponder.panHandlers}/>
-                <ScrollView scrollEnabled={!sceneListStore.editable} style={styles.frame}
-                    ref={(ref: any) => sceneListStore.setSenceListScrollViewRef(ref)}>
-                    <View style={styles.blockList}>
-                        {sceneBlocks}
-                    </View>
-                    {/* <Button title="task" onPress={() => this.props.navigation.navigate('Task')}/>
-                    <Button title="localstorage" onPress={() => this.saveData()}/>
-                    <Button title="get data" onPress={() => this.getData()}/> */}
-                    {moveBlock}
-                </ScrollView>
-                <View style={styles.scrollDown} {...this._scrollDownResponder.panHandlers}/>
-            </View>
+            <ScrollView scrollEnabled={!sceneListStore.editable}
+                onLayout={({nativeEvent:e})=>console.log(e)}
+                style={styles.frame}
+                ref={(ref: any) => sceneListStore.setSenceListScrollViewRef(ref)}>
+                <View style={styles.blockList}>
+                    {sceneBlocks}
+                </View>
+                {/* <Button title="task" onPress={() => this.props.navigation.navigate('Task')}/>
+                <Button title="localstorage" onPress={() => this.saveData()}/>
+                <Button title="get data" onPress={() => this.getData()}/> */}
+                {moveBlock}
+            </ScrollView>
         )
     }
 }

@@ -2,7 +2,7 @@ import * as React from 'react';
 import {View, Text, StyleSheet, Platform, Button, AsyncStorage, Dimensions, PanResponder,
     PanResponderInstance, Animated, TouchableWithoutFeedback, LayoutChangeEvent} from 'react-native';
 import {Scene} from '../../common/util';
-import {FIX_BLOCK_WIDTH, MOVE_BLOCK_WIDTH} from '../../common/const';
+import {FIX_BLOCK_WIDTH, MOVE_BLOCK_WIDTH, WINDOW_HEIGHT, WINDOW_WIDTH} from '../../common/const';
 import { observer } from 'mobx-react';
 import sceneListStore, {SceneListStore} from '../../stores/sceneList';
 import moveBlockStore from '../../stores/public/MoveBlock';
@@ -38,11 +38,9 @@ export default class SceneBlock extends React.Component<SceneBlockProps, any> {
     }
     componentWillMount(){
         this._panResponder = PanResponder.create({
-            onStartShouldSetPanResponder: () => true,
-            onMoveShouldSetPanResponder: ()=> {
-                console.log('move block ask');
-                return true;
-            },
+            onStartShouldSetPanResponder: (evt, gestureState) => true,
+            onMoveShouldSetPanResponderCapture: ()=> true,
+            onPanResponderTerminationRequest: ()=> false,
             onPanResponderGrant: (evt, gestureState)=>{
                 const {pageX, pageY, locationX, locationY} = evt.nativeEvent; 
             },
@@ -58,11 +56,18 @@ export default class SceneBlock extends React.Component<SceneBlockProps, any> {
                     }
                 });
                 if(sceneListStore.senceListScrollViewRef) {
+                    if(pageY < 72) {
+                        console.log('到顶');
+                        sceneListStore.senceListScrollViewRef.scrollTo({x: 0, y: 10, animated: true});
+                    } else if(pageY > WINDOW_HEIGHT - 10) {
+                        console.log('到底部');
+                        sceneListStore.senceListScrollViewRef.scrollTo({x: 0, y: 40, animated: true});
+                    }
+                    
                     // 如果可以滚动
                     // 判断moveblock是否已经移动到顶部
-                    // console.log('yes', sceneListStore.senceListScrollViewRef);
-                    console.log('移动中：', this._containerInitLeft, this._animateBlockInitLeft, gestureState.dx);
-                    console.log('方块坐标:', moveBlockStore);
+                    console.log('移动中：', evt.nativeEvent, gestureState);
+                    // console.log('方块坐标:', moveBlockStore);
                 }
                 moveBlockStore.setStyle({
                     backgroundColor: 'blue',

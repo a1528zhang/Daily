@@ -45,7 +45,6 @@ export class MoveBlockStore {
     }
     @action
     setStyle(s: object) {
-        console.log('before', s, this._style);
         this._style = {
             ...this._style,
             ...s,

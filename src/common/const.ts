@@ -8,6 +8,8 @@ function getBlockWidth(): number {
 export const BLOCK_NUM_IN_ONE_LINE = 3;
 export const FIX_BLOCK_WIDTH = getBlockWidth();
 export const MOVE_BLOCK_WIDTH = getBlockWidth() - 8;
+export const WINDOW_HEIGHT = Dimensions.get('window').height;
+export const WINDOW_WIDTH = Dimensions.get('window').width;
 
 export const TEST_SCENE_JSON = [
     {   
